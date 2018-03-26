@@ -1,7 +1,6 @@
 from tkinter import Tk, Menu, PhotoImage, messagebox, _tkinter
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Notebook, Style
-from tkinter.font import Font
 import tkinter.filedialog as fd
 from tkinter.simpledialog import askinteger, askstring
 import os
@@ -19,6 +18,7 @@ default_file_path = None
 
 
 def createNewTab(self):
+
     new_tab_id = top_tab_id[-1]+1
     top_tab_id.append(new_tab_id)
     new_tab_name = askstring('New Tab', 'Enter name of new tab')
@@ -52,26 +52,48 @@ def createNewTab(self):
             tab_image = c_logo
         elif(file_ext == '.cpp'):
             tab_image = cpp_logo
+        elif(file_ext == '.css'):
+            tab_image = css_logo
+        elif(file_ext == '.html'):
+            tab_image = html_logo
         elif(file_ext == '.java'):
             tab_image = java_logo
         elif(file_ext == '.js'):
             tab_image = javascript_logo
-        elif(file_ext == '.html'):
-            tab_image = html_logo
-        elif(file_ext == '.css'):
-            tab_image = css_logo
         elif(file_ext == '.py'):
             tab_image = python_logo
 
     tab_name = new_tab_name
     file_path = default_file_path
     scrolled_text = ScrolledText(font=normal_text_font)
-    #scrolled_text.bind('<Tab>', lambda x: scrolled_text.insert('current', ' '*4))
-    #scrolled_text.bind('<Button-3>', func=lambda event: popUpMenu(event))
+
+    file_ext = os.path.splitext(new_tab_name)[1]
+    if(file_ext == '.c'):
+        commonSyntaxBindings(scrolled_text)
+        cSyntaxBindings(scrolled_text)
+    elif(file_ext == '.cpp'):
+        commonSyntaxBindings(scrolled_text)
+        cppSyntaxBindings(scrolled_text)
+    elif(file_ext == '.css'):
+        commonSyntaxBindings(scrolled_text)
+        cssSyntaxBindings(scrolled_text)
+    elif(file_ext == '.html'):
+        commonSyntaxBindings(scrolled_text)
+        htmlSyntaxBindings(scrolled_text)
+    elif(file_ext == '.java'):
+        commonSyntaxBindings(scrolled_text)
+        javaSyntaxBindings(scrolled_text)
+    elif(file_ext == '.js'):
+        commonSyntaxBindings(scrolled_text)
+        jsSyntaxBindings(scrolled_text)
+    elif(file_ext == '.py'):
+        commonSyntaxBindings(scrolled_text)
+        pySyntaxBindings(scrolled_text)
+
+    scrolled_text.focus_set()
     Tabs.append([tab_name, scrolled_text, tab_image, normal_text_font, file_path])
     notebook.add(Tabs[-1][1], text=Tabs[-1][0],
                  image=Tabs[-1][2], compound='left')
-    print('Tabs = ', Tabs)
 
 
 def openFile(self):
@@ -122,23 +144,43 @@ def openFile(self):
             tab_image = css_logo
         elif(file_ext == '.py'):
             tab_image = python_logo
+
         tab_name = opened_file_name
         file_path = opened_file_name
         scrolled_text = ScrolledText(font=normal_text_font)
-        #scrolled_text.bind('<Tab>', lambda x: scrolled_text.insert('current', ' '*4))
-        #scrolled_text.bind('<Button-3>', func=lambda event: popUpMenu(event))
+
+        file_ext = os.path.splitext(new_tab_name)[1]
+        if(file_ext == '.c'):
+            commonSyntaxBindings(scrolled_text)
+            cSyntaxBindings(scrolled_text)
+        elif(file_ext == '.cpp'):
+            commonSyntaxBindings(scrolled_text)
+            cppSyntaxBindings(scrolled_text)
+        elif(file_ext == '.css'):
+            commonSyntaxBindings(scrolled_text)
+            cssSyntaxBindings(scrolled_text)
+        elif(file_ext == '.html'):
+            commonSyntaxBindings(scrolled_text)
+            htmlSyntaxBindings(scrolled_text)
+        elif(file_ext == '.java'):
+            commonSyntaxBindings(scrolled_text)
+            javaSyntaxBindings(scrolled_text)
+        elif(file_ext == '.js'):
+            commonSyntaxBindings(scrolled_text)
+            jsSyntaxBindings(scrolled_text)
+        elif(file_ext == '.py'):
+            commonSyntaxBindings(scrolled_text)
+            pySyntaxBindings(scrolled_text)
+
         Tabs.append([tab_name, scrolled_text, tab_image, normal_text_font, file_path])
         notebook.add(Tabs[-1][1], text=Tabs[-1][0],
                      image=Tabs[-1][2], compound='left')
-
-        # opened_file = open(self.opened_file_name, 'r')
-        Tabs[-1][1].insert('current', open(opened_file_name, 'r+').read())
+        Tabs[-1][1].insert('insert', open(opened_file_name, 'r+').read())
         scrolled_text.focus_set()
         scrolled_text.mark_set('insert', '0.0')
 
 
 def saveFile(self):
-    print(Tabs)
 
     current_tab = notebook.index('current')
     txt = Tabs[current_tab-1][1].get('1.0', 'end')
@@ -157,6 +199,7 @@ def saveFile(self):
 
 
 def removeCurrentTab(root):
+
     try:
         index = notebook.index('current')
         if messagebox.askquestion('Remove Current Tab', 'Are you sure you want to remove this tab?', icon='warning') == 'yes':
@@ -167,12 +210,14 @@ def removeCurrentTab(root):
 
 
 def removeCurrentTabUsingPopup(self, popup_menu):
+
     removeCurrentTab(root)
     popup_menu.unpost()
     popup_menu = None
 
 
 def popUpMenu(event, popup_menu):
+
     if notebook.index('end') == 0:
         popup_menu.entryconfig('Increase font size', state='disabled')
         popup_menu.entryconfig('Decrease font size', state='disabled')
@@ -185,6 +230,7 @@ def popUpMenu(event, popup_menu):
 
 
 def removePopUpMenu(event, popup_menu):
+
     popup_menu.unpost()
     popup_menu = Menu(notebook, tearoff=0)
     popup_menu.add_command(label='New Tab', command=lambda: createNewTab(root))
@@ -194,24 +240,25 @@ def removePopUpMenu(event, popup_menu):
 
 
 def increaseFontSize(root, popup_menu):
+
     index = notebook.index('current')
-    p = list(Tabs[index][3])
-    p[1] = p[1]+1
-    Tabs[index][3] = tuple(p)
+    list(Tabs[index][3])[1] += 1
+    tuple(Tabs[index][3])
     Tabs[index][1].config(font=Tabs[index][3])
     popup_menu.unpost()
 
 
 def decreaseFontSize(root, popup_menu):
+
     index = notebook.index('current')
-    p = list(Tabs[index][3])
-    p[1] = p[1]-1
-    Tabs[index][3] = tuple(p)
+    list(Tabs[index][3])[1] -= 1
+    tuple(Tabs[index][3])
     Tabs[index][1].config(font=Tabs[index][3])
     popup_menu.unpost()
 
 
 def setFontSizeManually(root, popup_menu):
+
     popup_menu.unpost()
     index = notebook.index('current')
     p = list(Tabs[index][3])
@@ -221,8 +268,159 @@ def setFontSizeManually(root, popup_menu):
     Tabs[index][1].config(font=Tabs[index][3])
 
 
+def commonSyntaxBindings(scrolled_text):
+
+    scrolled_text.bind('\'', func=lambda x: scrolled_text.insert('insert', '\''))
+    scrolled_text.bind('"', func=lambda x: scrolled_text.insert('insert', '"'))
+    scrolled_text.bind('<KeyRelease-parenleft>',
+                       func=lambda x: scrolledtextInsertParen(scrolled_text))
+    scrolled_text.bind('<KeyRelease-bracketleft>',
+                       func=lambda x: scrolledtextInsertBracket(scrolled_text))
+    scrolled_text.bind('<KeyRelease-braceleft>',
+                       func=lambda x: scrolledtextInsertBrace(scrolled_text))
+    scrolled_text.bind('<KeyRelease-Return>', func=lambda x: returnNewLine(scrolled_text))
+
+
+def cSyntaxBindings(scrolled_text):
+
+    default_c_text = """#include<stdio.h>
+
+int main(void)
+{
+\t
+
+\treturn 0;
+}"""
+    scrolled_text.insert('insert', default_c_text)
+    scrolled_text.mark_set('insert', '5.1')
+
+
+def cppSyntaxBindings(scrolled_text):
+
+    default_cpp_text = """#include<bits/stdc++.h>
+using namespace std;
+
+int main( void )
+{
+\t
+\treturn 0;
+}"""
+    scrolled_text.insert('insert', default_cpp_text)
+    scrolled_text.insert('insert', '6.1')
+
+
+def cssSyntaxBindings(scrolled_text):
+
+    default_css_text = """"""
+    scrolled_text.insert('insert', default_css_text)
+
+
+def htmlSyntaxBindings(scrolled_text):
+
+    default_html_text = """<!DOCTYPE html>
+<title>
+\t
+<\\title>
+<head>
+\t
+<\\head>
+<body>
+\t
+<//body>
+<//html>
+    """
+    scrolled_text.insert('insert', default_html_text)
+
+
+def javaSyntaxBindings(scrolled_text):
+
+    default_java_text = """public class <Class Name>
+{
+	public static void main(String[] args) {
+\t\t
+	}
+}
+    """
+    scrolled_text.insert('insert', default_java_text)
+
+
+def jsSyntaxBindings(scrolled_text):
+
+    default_js_text = ''
+    scrolled_text.insert('insert', default_js_text)
+
+
+def pySyntaxBindings(scrolled_text):
+
+    default_py_text = """for t in range(int(input())):
+\t
+    """
+    scrolled_text.insert('insert', default_py_text)
+
+
+def scrolledtextInsertParen(scrolled_text):
+
+    scrolled_text.mark_gravity('insert', 'left')
+    scrolled_text.insert('insert', ')')
+    scrolled_text.mark_gravity('insert', 'right')
+
+
+def scrolledtextInsertBracket(scrolled_text):
+
+    scrolled_text.mark_gravity('insert', 'left')
+    scrolled_text.insert('insert', ']')
+    scrolled_text.mark_gravity('insert', 'right')
+
+
+def scrolledtextInsertBrace(scrolled_text):
+
+    scrolled_text.mark_gravity('insert', 'left')
+    scrolled_text.insert('insert', '}')
+    scrolled_text.mark_gravity('insert', 'right')
+
+
+def returnNewLine(scrolled_text):
+
+    cursor_position = scrolled_text.index('insert')
+
+    row_index = int(cursor_position.split('.')[0])
+    col_index = int(cursor_position.split('.')[1])
+    prev_row_index = str(row_index - 1) + '.0'
+    prev_line = scrolled_text.get(prev_row_index, prev_row_index + ' lineend')
+    this_line = scrolled_text.get(cursor_position + ' linestart', cursor_position + ' lineend')
+    if(len(prev_line) > 1 and len(this_line) > 0):
+        left_char = prev_line[-1]
+        right_char = this_line[0]
+        new_line = ''.join(notAlphaLine(prev_line))
+        if((left_char == '(' and right_char == ')') or (left_char == '[' and right_char == ']') or (left_char == '{' and right_char == '}')):
+            scrolled_text.insert('insert', new_line + '\t')
+            scrolled_text.mark_gravity('insert', 'left')
+            scrolled_text.insert('insert', '\n\t')
+            scrolled_text.mark_gravity('insert', 'right')
+    elif(prev_line == '\t' and len(this_line) == 0):
+        scrolled_text.insert('insert', '\t')
+
+
+def notAlphaLine(line):
+
+    new_line = []
+    line = ''.join(line)
+    for char in line:
+        if (char == ' ' or char == '\t'):
+            new_line.append(char)
+        else:
+            return new_line
+    return new_line
+
+
 def hello():
     pass
+
+
+def askQuit(root):
+
+    if messagebox.askquestion('Quit', 'Do you really want to quit???', icon='warning') == 'yes':
+        root.quit()
 
 
 def Quode():
@@ -236,26 +434,24 @@ def Quode():
     global notebook
     notebook = Notebook(root)
     notebook.place_configure(relheight=0.95, relwidth=1, relx=0, rely=0.05)
-    """
-    s = ScrolledText(notebook, height=720, width=1200)
-    s.insert('current', 'kfksegksjbkzsjh')
-    s.focus_set()
-    notebook.add(s, text='temp')"""
+
     notebook.enable_traversal()
+
+    # menu
 
     menu_bar = Menu(root)
     file_menu = Menu(menu_bar, tearoff=0)
     file_menu.add_command(label='New Tab', font='arial 12',
-                          command=lambda: createNewTab(root))
+                          command=lambda x: createNewTab(root))
     file_menu.add_command(label="Open", font='arial 12',
-                          command=lambda: openFile(root))
+                          command=lambda x: openFile(root))
     file_menu.add_command(label="Save", font='arial 12',
-                          command=lambda: saveFile(root))
+                          command=lambda x: saveFile(root))
     file_menu.add_command(label='Remove Tab', font='arial 12',
-                          command=lambda: removeCurrentTab(root))
+                          command=lambda x: removeCurrentTab(root))
     file_menu.add_separator()
     file_menu.add_command(label="Exit", font='arial 12',
-                          command=lambda: root.quit())
+                          command=lambda x: root.quit())
     menu_bar.add_cascade(label="File", font='arial 12', menu=file_menu)
 
     edit_menu = Menu(menu_bar, tearoff=0)
@@ -271,9 +467,15 @@ def Quode():
     menu_bar.add_cascade(label="Help", font='arial 12', menu=help_menu)
     root.config(menu=menu_bar)
 
+    # root bindings
+
     root.bind('<Control-n>', func=lambda x: createNewTab(root))
     root.bind('<Control-o>', func=lambda x: openFile(root))
     root.bind('<Control-s>', func=lambda x: saveFile(root))
+    root.bind('<Control-q>', func=lambda x: askQuit(root))
+
+    # popup menu
+
     popup_menu = Menu(notebook, tearoff=0)
     popup_menu.add_command(label='New Tab', command=lambda: createNewTab(root))
     popup_menu.add_separator()
@@ -289,13 +491,19 @@ def Quode():
     popup_menu.entryconfig('Increase font size', state='normal')
     popup_menu.entryconfig('Decrease font size', state='normal')
     popup_menu.entryconfig('Set font size manually', state='normal')
+
+    # root bindings to popup
+
     root.bind('<Button-3>', func=lambda event: popUpMenu(event, popup_menu))
     root.bind('<Button-1>', func=lambda event: removePopUpMenu(root, popup_menu))
     root.bind('<Key>', func=lambda event: removePopUpMenu(root, popup_menu))
+
+    # info of every tab
+
     global Tabs, top_tab_id
     Tabs = []
-
     top_tab_id = [0]
+
     root.mainloop()
 
 
