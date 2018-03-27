@@ -22,81 +22,83 @@ def createNewTab(self):
     new_tab_id = top_tab_id[-1]+1
     top_tab_id.append(new_tab_id)
     new_tab_name = askstring('New Tab', 'Enter name of new tab')
-    c_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                          'c.gif')).subsample(
-        x=90, y=90)
-    cpp_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                            'cpp.png')).subsample(
-        x=15, y=15)
-    css_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                            'css.png')).subsample(
-        x=70, y=70)
-    html_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                             'html.png')).subsample(
-        x=45, y=45)
-    java_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                             'java.gif')).subsample(
-        x=15, y=15)
-    javascript_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                                   'javascript.png')).subsample(x=15, y=15)
-    python_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                               'python.png')).subsample(x=35, y=35)
-    txt_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
-                                            'txt.png')).subsample(x=13, y=13)
-    tab_image = txt_logo
-    if(new_tab_name == ''):
-        new_tab_name = 'Tab '+str(new_tab_id)
-    else:
+    if new_tab_name is not None:
+        c_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                              'c.gif')).subsample(
+            x=90, y=90)
+        cpp_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                'cpp.png')).subsample(
+            x=15, y=15)
+        css_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                'css.png')).subsample(
+            x=70, y=70)
+        html_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                 'html.png')).subsample(
+            x=45, y=45)
+        java_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                 'java.gif')).subsample(
+            x=15, y=15)
+        javascript_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                       'javascript.png')).subsample(x=15, y=15)
+        python_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                   'python.png')).subsample(x=35, y=35)
+        txt_logo = PhotoImage(file=os.path.join(IMG_FILEEXT_DIR,
+                                                'txt.png')).subsample(x=13, y=13)
+        tab_image = txt_logo
+        if(new_tab_name == ''):
+            new_tab_name = 'Tab '+str(new_tab_id)
+        else:
+            file_ext = os.path.splitext(new_tab_name)[1]
+            if(file_ext == '.c'):
+                tab_image = c_logo
+            elif(file_ext == '.cpp'):
+                tab_image = cpp_logo
+            elif(file_ext == '.css'):
+                tab_image = css_logo
+            elif(file_ext == '.html'):
+                tab_image = html_logo
+            elif(file_ext == '.java'):
+                tab_image = java_logo
+            elif(file_ext == '.js'):
+                tab_image = javascript_logo
+            elif(file_ext == '.py'):
+                tab_image = python_logo
+
+        tab_name = new_tab_name
+        file_path = default_file_path
+        scrolled_text = ScrolledText(
+            font=normal_text_font, background='#282c34', foreground='#aba6bf', highlightbackground='#3e4451', insertbackground='#996699')
+
         file_ext = os.path.splitext(new_tab_name)[1]
         if(file_ext == '.c'):
-            tab_image = c_logo
+            commonSyntaxBindings(scrolled_text)
+            cSyntaxBindings(scrolled_text)
         elif(file_ext == '.cpp'):
-            tab_image = cpp_logo
+            commonSyntaxBindings(scrolled_text)
+            cppSyntaxBindings(scrolled_text)
         elif(file_ext == '.css'):
-            tab_image = css_logo
+            commonSyntaxBindings(scrolled_text)
+            cssSyntaxBindings(scrolled_text)
         elif(file_ext == '.html'):
-            tab_image = html_logo
+            commonSyntaxBindings(scrolled_text)
+            htmlSyntaxBindings(scrolled_text)
         elif(file_ext == '.java'):
-            tab_image = java_logo
+            commonSyntaxBindings(scrolled_text)
+            javaSyntaxBindings(scrolled_text)
         elif(file_ext == '.js'):
-            tab_image = javascript_logo
+            commonSyntaxBindings(scrolled_text)
+            jsSyntaxBindings(scrolled_text)
         elif(file_ext == '.py'):
-            tab_image = python_logo
+            commonSyntaxBindings(scrolled_text)
+            pySyntaxBindings(scrolled_text)
 
-    tab_name = new_tab_name
-    file_path = default_file_path
-    scrolled_text = ScrolledText(font=normal_text_font)
-
-    file_ext = os.path.splitext(new_tab_name)[1]
-    if(file_ext == '.c'):
-        commonSyntaxBindings(scrolled_text)
-        cSyntaxBindings(scrolled_text)
-    elif(file_ext == '.cpp'):
-        commonSyntaxBindings(scrolled_text)
-        cppSyntaxBindings(scrolled_text)
-    elif(file_ext == '.css'):
-        commonSyntaxBindings(scrolled_text)
-        cssSyntaxBindings(scrolled_text)
-    elif(file_ext == '.html'):
-        commonSyntaxBindings(scrolled_text)
-        htmlSyntaxBindings(scrolled_text)
-    elif(file_ext == '.java'):
-        commonSyntaxBindings(scrolled_text)
-        javaSyntaxBindings(scrolled_text)
-    elif(file_ext == '.js'):
-        commonSyntaxBindings(scrolled_text)
-        jsSyntaxBindings(scrolled_text)
-    elif(file_ext == '.py'):
-        commonSyntaxBindings(scrolled_text)
-        pySyntaxBindings(scrolled_text)
-
-    scrolled_text.focus_set()
-    Tabs.append([tab_name, scrolled_text, tab_image, normal_text_font, file_path])
-    notebook.add(Tabs[-1][1], text=Tabs[-1][0],
-                 image=Tabs[-1][2], compound='left')
+        scrolled_text.focus_set()
+        Tabs.append([tab_name, scrolled_text, tab_image, normal_text_font, file_path])
+        notebook.add(Tabs[-1][1], text=Tabs[-1][0],
+                     image=Tabs[-1][2], compound='left')
 
 
-def openFile(self):
+def openFile(root):
 
     opened_file_name = fd.askopenfilename(initialdir="/home/dell/",
                                           title="Select file",
@@ -147,7 +149,8 @@ def openFile(self):
 
         tab_name = opened_file_name
         file_path = opened_file_name
-        scrolled_text = ScrolledText(font=normal_text_font)
+        scrolled_text = ScrolledText(font=normal_text_font, background='#282c34',
+                                     foreground='#aba6bf', highlightbackground='#3e4451', insertbackground='#996699')
 
         file_ext = os.path.splitext(new_tab_name)[1]
         if(file_ext == '.c'):
@@ -282,6 +285,7 @@ def commonSyntaxBindings(scrolled_text):
                        func=lambda x: scrolledtextInsertBrace(scrolled_text))
     scrolled_text.bind('<KeyRelease-Return>',
                        func=lambda x: returnNewLine(scrolled_text))
+    scrolled_text.bind('<Key>', func=lambda x: highlighter(scrolled_text))
 
 
 def cSyntaxBindings(scrolled_text):
@@ -296,6 +300,7 @@ int main(void)
 }"""
     scrolled_text.insert('insert', default_c_text)
     scrolled_text.mark_set('insert', '5.1')
+    scrolled_text.bind('<Key>', func=lambda event: highlightCKeywords(event, scrolled_text))
 
 
 def cppSyntaxBindings(scrolled_text):
@@ -408,17 +413,33 @@ def returnNewLine(scrolled_text):
     prev_row_index = str(row_index - 1) + '.0'
     prev_line = scrolled_text.get(prev_row_index, prev_row_index + ' lineend')
     this_line = scrolled_text.get(cursor_position + ' linestart', cursor_position + ' lineend')
-    if(len(prev_line) > 1 and len(this_line) > 0):
+    print('len prevlin =', len(prev_line), 'len thislin =', len(this_line))
+    if(len(prev_line) > 1):
         left_char = prev_line[-1]
-        right_char = this_line[0]
+
         new_line = ''.join(notAlphaLine(prev_line))
-        if((left_char == '(' and right_char == ')') or (left_char == '[' and right_char == ']') or (left_char == '{' and right_char == '}')):
-            scrolled_text.insert('insert', new_line + '\t')
-            scrolled_text.mark_gravity('insert', 'left')
-            scrolled_text.insert('insert', '\n\t')
-            scrolled_text.mark_gravity('insert', 'right')
-    elif(prev_line == '\t' and len(this_line) == 0):
-        scrolled_text.insert('insert', '\t')
+
+        if len(this_line) > 0:
+            right_char = this_line[0]
+            if((left_char == '(' and right_char == ')') or (left_char == '[' and right_char == ']') or (left_char == '{' and right_char == '}')):
+                scrolled_text.insert('insert', new_line + '\t')
+                scrolled_text.mark_gravity('insert', 'left')
+                scrolled_text.insert('insert', '\n\t')
+                scrolled_text.mark_gravity('insert', 'right')
+        else:
+            scrolled_text.insert('insert', new_line)
+    elif(len(prev_line) == 1):
+        if(len(this_line) == 0):
+            if (prev_line == '\t'):
+                scrolled_text.insert('insert', '\t')
+        if(len(this_line) > 0):
+            left_char = prev_line[0]
+            right_char = this_line[0]
+            if((left_char == '(' and right_char == ')') or (left_char == '[' and right_char == ']') or (left_char == '{' and right_char == '}')):
+                scrolled_text.insert('insert', '\t')
+                scrolled_text.mark_gravity('insert', 'left')
+                scrolled_text.insert('insert', '\n')
+                scrolled_text.mark_gravity('insert', 'right')
 
 
 def notAlphaLine(line):
@@ -441,6 +462,71 @@ def askQuit(root):
 
     if messagebox.askquestion('Quit', 'Do you really want to quit???', icon='warning') == 'yes':
         root.quit()
+
+
+def highlightCKeywords(event, scrolled_text):
+    green = '#bed905'
+    yellow = '#f4ed71'
+    blue = '#05acd3'
+    CKeywords = {'auto': green,
+                 'break': green,
+                 'else': green,
+                 'enum': green,
+                 'register': green,
+                 'extern': green,
+                 'continue': green,
+                 'for': green,
+                 'do': green,
+                 'if': green,
+                 'static': green,
+                 'while': green,
+                 'goto': green,
+                 'sizeof': green,
+                 'volatile': green,
+                 'double': yellow,
+                 'int': yellow,
+                 'long': yellow,
+                 'typedef': yellow,
+                 'char': yellow,
+                 'signed': yellow,
+                 'void': yellow,
+                 'default': yellow,
+                 'const': yellow,
+                 'float': yellow,
+                 'short': yellow,
+                 'unsigned': yellow,
+                 'struct': blue,
+                 'case': blue,
+                 'return': blue,
+                 'union': blue
+                 }
+    cursor_position = scrolled_text.index('insert')
+    row_index = cursor_position.split('.')[0]
+    col_index = cursor_position.split('.')[1]
+    for k, v in CKeywords.items():
+        if(event.keysym == 'Return'):
+            start_index = '1.0'
+            while True:
+                start_index = scrolled_text.search(k, start_index, 'end')
+                if start_index:
+                    end_index = scrolled_text.index('%s+%dc' % (start_index, (len(k))))
+                    scrolled_text.tag_add(k, start_index, end_index)
+
+                    scrolled_text.tag_config(k, foreground=v, relief='raised')
+                    start_index = end_index
+                else:
+                    break
+        else:
+            start_index = row_index + '.0'
+            while True:
+                start_index = scrolled_text.search(k, start_index, start_index + ' lineend')
+                if start_index:
+                    end_index = scrolled_text.index('%s+%dc' % (start_index, (len(k))))
+                    scrolled_text.tag_add(k, start_index, end_index)
+                    scrolled_text.tag_config(k, foreground=v)
+                    start_index = end_index
+                else:
+                    break
 
 
 def Quode():
