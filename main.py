@@ -184,8 +184,8 @@ def saveFile(self):
 
     current_tab = notebook.index('current')
     txt = Tabs[current_tabs][1].get('1.0', 'end')
-    if Tabs[current_tab-1][4] is not None:
-        with open(Tabs[current_tab-1][4], 'r+') as f:
+    if Tabs[current_tab][4] is not None:
+        with open(Tabs[current_tab][4], 'r+') as f:
             f.write(txt)
     else:
         new_file_path = fd.asksaveasfilename(parent=root, filetypes=[("All files", "*")])
