@@ -183,7 +183,7 @@ def openFile(self):
 def saveFile(self):
 
     current_tab = notebook.index('current')
-    txt = Tabs[current_tab-1][1].get('1.0', 'end')
+    txt = Tabs[current_tabs][1].get('1.0', 'end')
     if Tabs[current_tab-1][4] is not None:
         with open(Tabs[current_tab-1][4], 'r+') as f:
             f.write(txt)
@@ -270,15 +270,18 @@ def setFontSizeManually(root, popup_menu):
 
 def commonSyntaxBindings(scrolled_text):
 
-    scrolled_text.bind('\'', func=lambda x: scrolled_text.insert('insert', '\''))
-    scrolled_text.bind('"', func=lambda x: scrolled_text.insert('insert', '"'))
+    scrolled_text.bind('<KeyRelease-quoteright>',
+                       func=lambda x: scrolledtextInsertQuoteright(scrolled_text))
+    scrolled_text.bind('<KeyRelease-quotedbl>',
+                       func=lambda x: scrolledtextInsertQuotedbl(scrolled_text))
     scrolled_text.bind('<KeyRelease-parenleft>',
                        func=lambda x: scrolledtextInsertParen(scrolled_text))
     scrolled_text.bind('<KeyRelease-bracketleft>',
                        func=lambda x: scrolledtextInsertBracket(scrolled_text))
     scrolled_text.bind('<KeyRelease-braceleft>',
                        func=lambda x: scrolledtextInsertBrace(scrolled_text))
-    scrolled_text.bind('<KeyRelease-Return>', func=lambda x: returnNewLine(scrolled_text))
+    scrolled_text.bind('<KeyRelease-Return>',
+                       func=lambda x: returnNewLine(scrolled_text))
 
 
 def cSyntaxBindings(scrolled_text):
@@ -306,7 +309,7 @@ int main( void )
 \treturn 0;
 }"""
     scrolled_text.insert('insert', default_cpp_text)
-    scrolled_text.insert('insert', '6.1')
+    scrolled_text.mark_set('insert', '6.1')
 
 
 def cssSyntaxBindings(scrolled_text):
@@ -330,6 +333,7 @@ def htmlSyntaxBindings(scrolled_text):
 <//html>
     """
     scrolled_text.insert('insert', default_html_text)
+    scrolled_text.mark_set('insert', '3.1')
 
 
 def javaSyntaxBindings(scrolled_text):
@@ -342,6 +346,7 @@ def javaSyntaxBindings(scrolled_text):
 }
     """
     scrolled_text.insert('insert', default_java_text)
+    scrolled_text.mark_set('insert', '4.2')
 
 
 def jsSyntaxBindings(scrolled_text):
@@ -356,6 +361,7 @@ def pySyntaxBindings(scrolled_text):
 \t
     """
     scrolled_text.insert('insert', default_py_text)
+    scrolled_text.mark_set('insert', '2.1')
 
 
 def scrolledtextInsertParen(scrolled_text):
@@ -376,6 +382,20 @@ def scrolledtextInsertBrace(scrolled_text):
 
     scrolled_text.mark_gravity('insert', 'left')
     scrolled_text.insert('insert', '}')
+    scrolled_text.mark_gravity('insert', 'right')
+
+
+def scrolledtextInsertQuoteright(scrolled_text):
+
+    scrolled_text.mark_gravity('insert', 'left')
+    scrolled_text.insert('insert', '\'')
+    scrolled_text.mark_gravity('insert', 'right')
+
+
+def scrolledtextInsertQuotedbl(scrolled_text):
+
+    scrolled_text.mark_gravity('insert', 'left')
+    scrolled_text.insert('insert', '"')
     scrolled_text.mark_gravity('insert', 'right')
 
 
