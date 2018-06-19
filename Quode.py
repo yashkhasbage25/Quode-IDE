@@ -18,7 +18,46 @@ from tkinter.simpledialog import askstring
 from tkinter.font import Font
 import os
 from sys import argv
+
+from pygments.lexers.c_cpp import CFamilyLexer
+from pygments.lexers.c_cpp import CLexer
+from pygments.lexers.c_cpp import CppLexer
+from pygments.lexers.css import CssLexer
+from pygments.lexers.css import SassLexer
+from pygments.lexers.data import YamlLexer
+from pygments.lexers.data import JsonLexer
+from pygments.lexers.dotnet import CSharpLexer
+from pygments.lexers.dotnet import FSharpLexer
+from pygments.lexers.eiffel import EiffelLexer
+from pygments.lexers.erlang import ErlangLexer
+from pygments.lexers.fortran import FortranLexer
+from pygments.lexers.go import GoLexer
+from pygments.lexers.haskell import HaskellLexer
+from pygments.lexers.hdl import VhdlLexer
+from pygments.lexers.hdl import VerilogLexer
+from pygments.lexers.html import HtmlLexer
+from pygments.lexers.html import XmlLexer
+from pygments.lexers.javascript import JavascriptLexer
+from pygments.lexers.javascript import TypeScriptLexer
+from pygments.lexers.javascript import CoffeeScriptLexer
+from pygments.lexers.jvm import JavaLexer
+from pygments.lexers.jvm import ScalaLexer
+from pygments.lexers.jvm import KotlinLexer
+from pygments.lexers.lisp import CommonLispLexer
+from pygments.lexers.make import MakefileLexer
+from pygments.lexers.make import CMakeLexer
+from pygments.lexers.matlab import MatlabLexer
+from pygments.lexers.pascal import DelphiLexer
+from pygments.lexers.perl import PerlLexer
+from pygments.lexers.php import PhpLexer
+from pygments.lexers.prolog import PrologLexer
 from pygments.lexers.python import PythonLexer
+from pygments.lexers.python import Python3Lexer
+from pygments.lexers.ruby import RubyLexer
+from pygments.lexers.shell import BashLexer
+from pygments.lexers.sql import MySqlLexer
+from pygments.lexers.tcl import TclLexer
+from pygments.lexers.textedit import AwkLexer
 
 from pygments.styles import get_style_by_name
 
@@ -200,6 +239,8 @@ class App(Tk):
         self.swift_img = PhotoImage(file='img/fext/swift.png')
         self.txt_img = PhotoImage(file='img/fext/txt.png')
 
+        self.lexers = self.createLexers()
+
         self.mainloop()
 
     def configureUI(self):
@@ -308,6 +349,7 @@ class App(Tk):
             scrolled_text = ScrolledText(font=self.code_font, undo=True)
             self.Editors.append(scrolled_text)
             self.filenames[scrolled_text] = None
+            self.lexers[scrolled_text]
             self.notebook.add(scrolled_text, image=self.langImg(ext), text=os.path.split(new_tab_name)[1], compound='left')
             self.notebook.select(scrolled_text)
             self.createTags()
@@ -323,7 +365,7 @@ class App(Tk):
             scrolled_text = ScrolledText(font=self.code_font, undo=True)
             self.Editors.append(scrolled_text)
             self.filenames[scrolled_text] = None
-            self.notebook.add(scrolled_text, image=self.langImg('.txt'), text=os.path.split(new_tab_name)[1], compound='left')
+            self.notebook.add(scrolled_text, image=self.langImg('.txt'), text=f_name, compound='left')
             self.notebook.select(scrolled_text)
             self.createTags()
             self.recolorize(None)
@@ -636,6 +678,38 @@ class App(Tk):
             start_index = end_index
         self.update()
         # print(Font(curr_editor, curr_editor.cget("font")).cget("size"))
+
+    def createLexers(self):
+
+        lex = {}
+        lex['.c'] = CFamilyLexer()
+        lex['.h'] = CFamilyLexer()
+        lex['.cpp'] = CppLexer()
+        lex['.hpp'] = CppLexer()
+        lex['.css'] = CssLexer()
+        lex['.sass'] = SassLexer()
+        lex['.yaml'] = YamlLexer()
+        lex['.yml'] = YamlLexer()
+        lex['.json'] = JsonLexer()
+        lex['.cs'] = CSharpLexer()
+        lex['.fs'] = FSharpLexer()
+        lex['.e'] = EiffelLexer()
+        lex['.erl'] = ErlangLexer()
+        lex['.hrl'] = ErlangLexer()
+        lex['.es'] = ErlangLexer()
+        lex['.f03'] = FortranLexer()
+        lex['.f90'] = FortranLexer()
+        lex['.F03'] = FortranLexer()
+        lex['.F90'] = FortranLexer()
+        lex['.go'] = GoLexer()
+        lex['.hs'] = HaskellLexer()
+        lex['.v'] = VerilogLexer()
+        lex['.vhdl'] = VhdlLexer()
+        lex['.vhd'] = VhdlLexer()
+        lex['.html'] = HtmlLexer()
+        lex['.htm'] = HtmlLexer()
+        lex['.xhtml'] = HtmlLexer()
+        lex['.']
 
 
 def main(args):
