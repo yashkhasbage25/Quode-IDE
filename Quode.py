@@ -741,29 +741,30 @@ class App(Tk):
             curr_editor = self._get_current_editor()
             code = curr_editor.get("1.0", "end-1c")
             lexer = self.Lexers[curr_editor]
-            tokensource = lexer.get_tokens(text=code)
-            start_line = 1
-            start_index = 0
-            end_line = 1
-            end_index = 0
-            for ttype, value in tokensource:
-                if "\n" in value:
-                    end_line += value.count("\n")
-                    end_index = len(value.rsplit("\n", 1)[1])
-                else:
-                    end_index += len(value)
+            if lexer is not None:
+                tokensource = lexer.get_tokens(text=code)
+                start_line = 1
+                start_index = 0
+                end_line = 1
+                end_index = 0
+                for ttype, value in tokensource:
+                    if "\n" in value:
+                        end_line += value.count("\n")
+                        end_index = len(value.rsplit("\n", 1)[1])
+                    else:
+                        end_index += len(value)
 
-                if value not in (" ", "\n"):
-                    index1 = "%s.%s" % (start_line, start_index)
-                    index2 = "%s.%s" % (end_line, end_index)
+                    if value not in (" ", "\n"):
+                        index1 = "%s.%s" % (start_line, start_index)
+                        index2 = "%s.%s" % (end_line, end_index)
 
-                    for tagname in curr_editor.tag_names(index1):
-                        curr_editor.tag_remove(tagname, index1, index2)
+                        for tagname in curr_editor.tag_names(index1):
+                            curr_editor.tag_remove(tagname, index1, index2)
 
-                    curr_editor.tag_add(str(ttype), index1, index2)
+                        curr_editor.tag_add(str(ttype), index1, index2)
 
-                start_line = end_line
-                start_index = end_index
+                    start_line = end_line
+                    start_index = end_index
 
             # self.underlineComplement()
 
