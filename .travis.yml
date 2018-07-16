@@ -1,0 +1,9 @@
+language: python
+python:
+    - 3.5
+    - 3.6
+    - 3.7
+install:
+    - apt-get install python3-tk
+    - pip3 install pygments
+script: python3 Quode.py file_tree.py
