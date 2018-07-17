@@ -5,5 +5,5 @@ python:
     - 3.7
 install:
     - sudo apt-get install python3-tk
-    - pip3 install pygments
+    - sudo pip3 install pygments
 script: python3 Quode.py file_tree.py
